@@ -57,7 +57,6 @@ const TransactionForm = ({
         onChange={(e) => setAmount(e.target.value)}
         placeholder="0.01"
         type="number"
-        step="0.000000000000000001"
       />
 
       {error && <p className="text-red-500 text-sm">{error}</p>}

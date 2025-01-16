@@ -31,8 +31,13 @@ const useTransactionForm = ({
       return;
     }
 
+    if (!ethers.isAddress(walletAddress)) {
+      setError("Invalid wallet address.");
+      return;
+    }
+
     if (!window.ethereum || !account) {
-      toast.error("MetaMask is not installed!");
+      toast.error("MetaMask is not installed or account is not connected!");
       return;
     }
 
@@ -41,23 +46,20 @@ const useTransactionForm = ({
       setError(null);
 
       const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
 
       const value = ethers.parseUnits(amount, "ether");
 
-      const gasLimit = await provider.estimateGas({
+      const tx = {
         to: walletAddress,
         value,
-        from: account,
-      });
+        gasLimit: 21000,
+      };
 
-      const tx = await signer.sendTransaction({
-        to: walletAddress,
-        value,
-        gasLimit,
-      });
+      const signer = await provider.getSigner();
+      const response = await signer.sendTransaction(tx);
+      toast.success(`Transaction sent! Hash: ${response.hash}`);
 
-      const receipt = await tx.wait();
+      const receipt = await response.wait();
 
       if (receipt?.status === 1) {
         toast.success("Transaction confirmed successfully!");
