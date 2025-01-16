@@ -46,16 +46,16 @@ const TransactionForm = ({
 
       <Input
         label="Wallet Address"
-        value={walletAddress}
         onChange={(e) => setWalletAddress(e.target.value)}
         placeholder="Enter wallet address"
       />
 
       <Input
         label="Amount (BNB)"
-        value={amount}
         onChange={(e) => setAmount(e.target.value)}
         placeholder="0.01"
+        min="0"
+        step="0.01"
         type="number"
       />
 
