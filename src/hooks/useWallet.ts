@@ -1,15 +1,20 @@
 import { useState } from "react";
-import { useSDK } from "@metamask/sdk-react";
+import { toast } from "react-toastify";
+import { ethers } from "ethers";
 
 export const useWallet = () => {
-  const { sdk, connected } = useSDK();
   const [account, setAccount] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   const connect = async () => {
+    if (!window.ethereum) {
+      toast("Metamask is not installed");
+      return;
+    }
     try {
       setLoading(true);
-      const accounts = await sdk?.connect();
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
       setAccount(accounts?.[0]);
     } catch (err) {
       console.warn("Failed to connect..", err);
@@ -29,5 +34,5 @@ export const useWallet = () => {
     }
   };
 
-  return { loading, setLoading, connected, account, connect, logout };
+  return { loading, setLoading, account, connect, logout };
 };

@@ -13,8 +13,7 @@ interface ICryptoCardProps {
 
 const CryptoCard = ({ name = "Binance Coin" }: ICryptoCardProps) => {
   const [price, setPrice] = useState("");
-  const { connected, account, loading, setLoading, connect, logout } =
-    useWallet();
+  const { account, loading, setLoading, connect, logout } = useWallet();
   const [isFormActive, setIsFormActive] = useState(false);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ const CryptoCard = ({ name = "Binance Coin" }: ICryptoCardProps) => {
     <section className="w-[380px] break-words p-6 rounded-3xl bg-gradient-to-br from-purple-900/90 to-black text-white">
       <h2 className="text-3xl font-light">{name}</h2>
 
-      {connected && account ? (
+      {account ? (
         <div className="mt-3">
           Connected account:{" "}
           <span className="font-bold text-[13px]">{account}</span>
@@ -62,7 +61,7 @@ const CryptoCard = ({ name = "Binance Coin" }: ICryptoCardProps) => {
 
       {!isFormActive ? (
         <section className="flex flex-col gap-3 mt-6">
-          {!connected || !account ? (
+          {!account ? (
             <Button
               className="bg-orange-600 hover:bg-orange-900"
               loading={loading}
